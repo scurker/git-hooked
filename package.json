@@ -1,0 +1,28 @@
+{
+  "name": "git-hooked",
+  "version": "0.0.1",
+  "description": "Manage repository git hooks",
+  "main": "./lib/hook-runner.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scurker/git-hooked.git"
+  },
+  "keywords": [
+    "git",
+    "hooks",
+    "hook",
+    "github"
+  ],
+  "author": "Jason Wilson",
+  "license": "mit",
+  "bugs": {
+    "url": "https://github.com/scurker/git-hooked/issues"
+  },
+  "homepage": "https://github.com/scurker/git-hooked",
+  "dependencies": {
+    "mocha": "^2.2.4"
+  }
+}
