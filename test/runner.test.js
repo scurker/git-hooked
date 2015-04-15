@@ -1,34 +1,47 @@
-var child = require('child_process')
-  , assert = require('assert')
+var assert = require('assert')
   , mock = require('mock-fs')
+  , fs = require('fs')
   , utils = require('../lib/utils')
   , gh = require('../lib/git-hooked')
   , runner;
 
 describe('Git-Hooked runner', function() {
 
-  afterEach('restore fs', mock.restore);
-
   before('require runner', function() {
     runner = require('../lib/hook-runner');
-  });
-
-  beforeEach(function() {
     mock({
       '.hooks': {
-        'pre-commit': '#!/bin/bash\n\necho "pre commit"',
-        'pre-push': '#!/bin/bash\n\nexit 1'
-      },
-      '.git/hooks': {}
+        'pre-commit': mock.file({
+            content: '#!/bin/bash\n\necho "pre commit"',
+            mode: 0755
+          }),
+        'pre-push': mock.file({
+            content: '#!/bin/bash\n\nexit 1',
+            mode: 0755
+          })
+      }
     });
   });
 
-  it.skip('executes hook', function() {
+  after('restore fs', mock.restore);
+
+  it.skip('executes hook successfully', function(done) {
+    var exit = process.exit;
+    process.exit = function(code) {
+      assert.equal(0, code);
+      done();
+    };
     runner('pre-commit');
+    process.exit = exit;
   });
 
-  it.skip('fails if hook fails', function() {
+  it.skip('fails if hook fails', function(done) {
+    process.exit = function(code) {
+      assert.equal(1, code);
+      done();
+    };
     runner('pre-push');
+    process.exit = exit;
   });
 
 });
