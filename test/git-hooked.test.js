@@ -7,7 +7,7 @@ var assert = require('assert')
 
 describe('Git-Hooked Setup', function() {
 
-  after('restore fs', mock.restore);
+  afterEach('restore fs', mock.restore);
 
   it('checks for git project', function() {
     mock({
@@ -28,7 +28,10 @@ describe('Git-Hooked Setup', function() {
   it('sets up hooks', function() {
     mock({
       '.hooks': hooks.reduce(function(o, v) { o[v] = ''; return o; }, {}),
-      '.git/hooks': {}
+      '.git/hooks': {},
+      'lib': {
+        'hook.template.js': ''
+      }
     });
     gh.setupHooks();
     hooks.forEach(function(hook) {
@@ -42,7 +45,10 @@ describe('Git-Hooked Setup', function() {
         'pre-commit': '',
         'post-commit': ''
       },
-      '.git/hooks': {}
+      '.git/hooks': {},
+      'lib': {
+        'hook.template.js': ''
+      }
     });
     gh.setupHooks();
     assert.equal(true, utils.fileExists('.git/hooks/pre-commit'));

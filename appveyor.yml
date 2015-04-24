@@ -5,7 +5,7 @@ branches:
 environment:
   matrix:
     #- nodejs_version: "0.12"
-    #- nodejs_version: "0.11"
+    - nodejs_version: "0.11"
     - nodejs_version: "0.10"
     - nodejs_version: "1"
 install:
