@@ -36,8 +36,9 @@ describe('Git-Hooked runner', function() {
   });
 
   it.skip('fails if hook fails', function(done) {
+    var exit = process.exit;
     process.exit = function(code) {
-      assert.equal(1, code);
+      assert.equal(0, code);
       done();
     };
     runner('pre-push');
