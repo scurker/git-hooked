@@ -1,11 +1,14 @@
 {
   "name": "git-hooked",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Manage repository git hooks",
   "main": "./lib/hook-runner.js",
   "scripts": {
-    "test": "mocha test",
-    "install": "node ./bin/install"
+    "install": "node ./bin/install",
+    "test": "mocha test"
+  },
+  "bin": {
+    "git-hooked": "lib/cli.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +28,7 @@
   "homepage": "https://github.com/scurker/git-hooked",
   "dependencies": {
     "mocha": "^2.2.4",
-    "mock-fs": "^2.5.0"
+    "mock-fs": "^2.5.0",
+    "yargs": "^3.8.0"
   }
 }
