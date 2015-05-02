@@ -4,7 +4,6 @@
   "description": "Manage repository git hooks",
   "main": "./lib/hook-runner.js",
   "scripts": {
-    "install": "node ./bin/install",
     "test": "mocha test"
   },
   "bin": {

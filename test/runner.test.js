@@ -1,31 +1,36 @@
 var assert = require('assert')
-  , mock = require('mock-fs')
   , fs = require('fs')
+  , path = require('path')
   , utils = require('../lib/utils')
   , gh = require('../lib/git-hooked')
-  , runner;
+  , runner = require('../lib/hook-runner');
 
 describe('Git-Hooked runner', function() {
 
-  before('require runner', function() {
-    runner = require('../lib/hook-runner');
-    mock({
-      '.hooks': {
-        'pre-commit': mock.file({
-            content: '#!/bin/bash\n\necho "pre commit"',
-            mode: 0755
-          }),
-        'pre-push': mock.file({
-            content: '#!/bin/bash\n\nexit 1',
-            mode: 0755
-          })
-      }
-    });
+  before('setup fixtures', function() {
+    fs.mkdirSync(path.resolve(process.cwd(), '.hooks'));
+
+    fs.createReadStream(path.resolve(__dirname, 'fixtures/pre-commit'))
+      .pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-commit')))
+
+    fs.createReadStream(path.resolve(__dirname, 'fixtures/pre-push'))
+      .pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-push')));
+
+    fs.chmod(path.resolve(process.cwd(), gh.userHooks, 'pre-commit'), 0755);
+    fs.chmod(path.resolve(process.cwd(), gh.userHooks, 'pre-push'), 0755);
   });
 
-  after('restore fs', mock.restore);
+  after('remove fixtures', function() {
+    var files = fs.readdirSync(path.resolve(process.cwd(), gh.userHooks));
 
-  it.skip('executes hook successfully', function(done) {
+    files.forEach(function(file) {
+      fs.unlinkSync(path.join(process.cwd(), gh.userHooks, file));
+    });
+
+    fs.rmdirSync(path.resolve(process.cwd(), gh.userHooks));
+  });
+
+  it('executes hook successfully', function(done) {
     var exit = process.exit;
     process.exit = function(code) {
       assert.equal(0, code);
@@ -35,10 +40,10 @@ describe('Git-Hooked runner', function() {
     process.exit = exit;
   });
 
-  it.skip('fails if hook fails', function(done) {
+  it('fails if hook fails', function(done) {
     var exit = process.exit;
     process.exit = function(code) {
-      assert.equal(0, code);
+      assert.equal(1, code);
       done();
     };
     runner('pre-push');
