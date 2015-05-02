@@ -16,8 +16,8 @@ describe('Git-Hooked runner', function() {
     fs.createReadStream(path.resolve(__dirname, 'fixtures/pre-push'))
       .pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-push')));
 
-    fs.chmod(path.resolve(process.cwd(), gh.userHooks, 'pre-commit'), 0755);
-    fs.chmod(path.resolve(process.cwd(), gh.userHooks, 'pre-push'), 0755);
+    fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-commit'), 0755);
+    fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-push'), 0755);
   });
 
   after('remove fixtures', function() {
@@ -31,6 +31,7 @@ describe('Git-Hooked runner', function() {
   });
 
   it('executes hook successfully', function(done) {
+    this.timeout(5000);
     var exit = process.exit;
     process.exit = function(code) {
       assert.equal(0, code);
@@ -41,6 +42,7 @@ describe('Git-Hooked runner', function() {
   });
 
   it('fails if hook fails', function(done) {
+    this.timeout(5000);
     var exit = process.exit;
     process.exit = function(code) {
       assert.equal(1, code);
