@@ -10,14 +10,20 @@ describe('Git-Hooked runner', function() {
   before('setup fixtures', function() {
     fs.mkdirSync(path.resolve(process.cwd(), '.hooks'));
 
-    fs.createReadStream(path.resolve(__dirname, 'fixtures/pre-commit'))
-      .pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-commit')))
+    var c1 = fs.createReadStream(path.resolve(__dirname, 'fixtures/pre-commit'));
+    var c2 = fs.createReadStream(path.resolve(__dirname, 'fixtures/pre-push'));
 
-    fs.createReadStream(path.resolve(__dirname, 'fixtures/pre-push'))
-      .pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-push')));
+    c1.pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-commit')));
+    c2.pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-push')));
 
-    fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-commit'), 0755);
-    fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-push'), 0755);
+    c1.on('end', function() {
+      fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-commit'), 0755);
+    });
+
+    c2.on('end', function() {
+      fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-push'), 0755);
+    });
+
   });
 
   after('remove fixtures', function() {
