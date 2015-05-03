@@ -9,12 +9,12 @@ describe('Git-Hooked runner', function() {
 
   before('setup fixtures', function() {
     fs.mkdirSync(path.resolve(process.cwd(), '.hooks'));
+    
+    var h1 = fs.readFileSync(path.resolve(__dirname, 'fixtures/pre-commit'));
+    var h2 = fs.readFileSync(path.resolve(__dirname, 'fixtures/pre-push'));
 
-    var c1 = fs.createReadStream(path.resolve(__dirname, 'fixtures/pre-commit'));
-    var c2 = fs.createReadStream(path.resolve(__dirname, 'fixtures/pre-push'));
-
-    c1.pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-commit')));
-    c2.pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-push')));
+    fs.writeFileSync(path.resolve(process.cwd(), gh.userHooks, 'pre-commit'), h1);
+    fs.writeFileSync(path.resolve(process.cwd(), gh.userHooks, 'pre-push'), h2);
 
     fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-commit'), 0755);
     fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-push'), 0755);
