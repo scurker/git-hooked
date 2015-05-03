@@ -16,14 +16,8 @@ describe('Git-Hooked runner', function() {
     c1.pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-commit')));
     c2.pipe(fs.createWriteStream(path.resolve(process.cwd(), gh.userHooks, 'pre-push')));
 
-    c1.on('end', function() {
-      fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-commit'), 0755);
-    });
-
-    c2.on('end', function() {
-      fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-push'), 0755);
-    });
-
+    fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-commit'), 0755);
+    fs.chmodSync(path.resolve(process.cwd(), gh.userHooks, 'pre-push'), 0755);
   });
 
   after('remove fixtures', function() {
