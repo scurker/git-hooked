@@ -9,7 +9,7 @@ describe('Git-Hooked runner', function() {
 
   before('setup fixtures', function() {
     fs.mkdirSync(path.resolve(process.cwd(), '.hooks'));
-    
+
     var h1 = fs.readFileSync(path.resolve(__dirname, 'fixtures/pre-commit'));
     var h2 = fs.readFileSync(path.resolve(__dirname, 'fixtures/pre-push'));
 
@@ -31,7 +31,7 @@ describe('Git-Hooked runner', function() {
   });
 
   it('executes hook successfully', function(done) {
-    this.timeout(15000);
+    this.timeout(30000);
     var exit = process.exit;
     process.exit = function(code) {
       assert.equal(0, code);
@@ -42,7 +42,7 @@ describe('Git-Hooked runner', function() {
   });
 
   it('fails if hook fails', function(done) {
-    this.timeout(15000);
+    this.timeout(30000);
     var exit = process.exit;
     process.exit = function(code) {
       assert.equal(1, code);
