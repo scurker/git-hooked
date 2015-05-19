@@ -31,7 +31,7 @@ describe('Git-Hooked runner', function() {
   });
 
   it('executes hook successfully', function(done) {
-    this.timeout(30000);
+    this.timeout(60000);
     var exit = process.exit;
     process.exit = function(code) {
       assert.equal(0, code);
@@ -42,7 +42,7 @@ describe('Git-Hooked runner', function() {
   });
 
   it('fails if hook fails', function(done) {
-    this.timeout(30000);
+    this.timeout(60000);
     var exit = process.exit;
     process.exit = function(code) {
       assert.equal(1, code);
